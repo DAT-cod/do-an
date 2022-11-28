@@ -25,24 +25,24 @@ private ProductConvert productConvert;
 
 @Override
 public ProductDTO save(ProductDTO productDTO) {
-	if(productDTO.getProductId()!=null)
+	Product productNewID=new Product();
+	if(productDTO.getProductId() != null)
 	{
 		Product productOldID= productRepository.findOneById(productDTO.getProductId());
-		Product productNewID= new Product();
-		productNewID.setId(productOldID.getId());
-		productNewID=productConvert.toEntity(productDTO, productNewID);
-		return productConvert.toDTO(productNewID);
+		productNewID=productConvert.toEntity(productDTO, productOldID);
 		
 	}
 	else {
+	productNewID=productConvert.toEntity(productDTO);
+	}
 	Categories categories= categoryStoreRepositery.findOneBycategoryName(productDTO.getProductTypeName());
 	Store store=storeRespository.findOneById(productDTO.getStoreId());
-	Product product = productConvert.toEntity(productDTO);
-	product.setCategories(categories);
-	product.setStore(store);
-	product= productRepository.save(product);
-	return productConvert.toDTO(product);
-	}
+	productNewID.setCategories(categories);
+	productNewID.setStore(store);
+	productNewID= productRepository.save(productNewID);
+	return productConvert.toDTO(productNewID);
+	
+}
 	
 }
 
