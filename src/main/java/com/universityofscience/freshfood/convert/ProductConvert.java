@@ -27,6 +27,7 @@ public class ProductConvert {
 		productDTO.setExpiryDate(product.getExpiryDay());
 		productDTO.setPrice(product.getPrice());
 		
+		
 		return productDTO;
 	}
 	public Product toEntity(ProductDTO dto,Product product)

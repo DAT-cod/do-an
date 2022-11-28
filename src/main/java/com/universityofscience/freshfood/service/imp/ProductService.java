@@ -7,15 +7,19 @@ import com.universityofscience.freshfood.convert.ProductConvert;
 import com.universityofscience.freshfood.dto.ProductDTO;
 import com.universityofscience.freshfood.entity.Categories;
 import com.universityofscience.freshfood.entity.Product;
-import com.universityofscience.freshfood.repositery.CategoryStoreRepositery;
+import com.universityofscience.freshfood.entity.Store;
+import com.universityofscience.freshfood.repositery.CategoryProductRepositery;
 import com.universityofscience.freshfood.repositery.SanPhamRepository;
+import com.universityofscience.freshfood.repositery.StoreRespository;
 import com.universityofscience.freshfood.service.IProductService;
 @Service
 public class ProductService implements IProductService {
 @Autowired
+private StoreRespository storeRespository;
+@Autowired
 private SanPhamRepository productRepository;
 @Autowired
-private CategoryStoreRepositery categoryStoreRepositery;
+private CategoryProductRepositery categoryStoreRepositery;
 @Autowired
 private ProductConvert productConvert;
 
@@ -32,8 +36,10 @@ public ProductDTO save(ProductDTO productDTO) {
 	}
 	else {
 	Categories categories= categoryStoreRepositery.findOneBycategoryName(productDTO.getProductTypeName());
+	Store store=storeRespository.findOneById(productDTO.getStoreId());
 	Product product = productConvert.toEntity(productDTO);
 	product.setCategories(categories);
+	product.setStore(store);
 	product= productRepository.save(product);
 	return productConvert.toDTO(product);
 	}
